@@ -1,4 +1,4 @@
-# # My Audio Plugin Job Hunt 🎧🎛️🕵️
+# My Audio Plugin Job Hunt 🎧🎛️🕵️
 
 An automated weekly job hunter for audio plugin developers on the job hunt! Using the power of AWS Lambda, this project fetches the freshest job postings from major audio plugin companies and sends a personalized email to my inbox every Monday. Turning the grueling job hunt into a fun and lighthearted experience!
 
