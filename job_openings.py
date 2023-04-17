@@ -6,6 +6,32 @@ import requests
 from bs4 import BeautifulSoup
 from company_dictionaries import companies, js_companies, no_listing_companies
 
+def generate_motivation():
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {os.environ["GPT_KEY"]}'
+    }
+
+    data = {
+        "model": "text-davinci-003",
+        "prompt": "Cheerful, two-sentence inspiration!",
+        "temperature": 1,
+        "max_tokens": 50,
+        "top_p": 1,
+        "frequency_penalty": 0,
+        "presence_penalty": 0
+    }
+
+    response = requests.post('https://api.openai.com/v1/completions', headers=headers, json=data)
+
+    if response.status_code == 200:
+        generated_text = response.json()['choices'][0]['text']
+    else:
+        print(f'Error reaching openai: {response.status_code}')
+        generated_text = "Here’s a little motivational message. We’ll keep it short and sweet and cheery!"
+
+    return generated_text
+
 color_scheme = {
     'background': 'D9D9D9',
     'container': 'FFF',
@@ -19,6 +45,8 @@ def send_email_ses(job_openings_by_company):
 
     subject = 'Job Openings'
 
+    message = generate_motivation()
+
     body_html = f"""
     <html>
        <body style="background-color: #{color_scheme['background']};text-align: center;font-family: Optima;">
@@ -29,7 +57,7 @@ def send_email_ses(job_openings_by_company):
 	            </div>
                 <div class="quote" style="font-family: Optima;color: #{color_scheme['quote']};padding-left: 25%;padding-right: 25%;">
     	            <hr style="margin: 20px auto;width: 50%;">
-    	            <em>Here’s a little motivational message. We’ll keep it short and sweet and cheery!</em>
+    	            <em>{message}</em>
                     <hr style="margin: 20px auto;width: 50%;">
                 </div>
                 <div class="content" style="font-family: Optima;">
