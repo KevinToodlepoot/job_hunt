@@ -7,11 +7,11 @@ from bs4 import BeautifulSoup
 from company_dictionaries import companies, js_companies, no_listing_companies
 
 color_scheme = {
-    'background': 'BBB',
+    'background': 'D9D9D9',
     'container': 'FFF',
-    'text': '444',
-    'links': '6C3E3C',
-    'line': '999',
+    'text': '000',
+    'links': '8B0000',
+    'quote': '858585',
 }
 
 def send_email_ses(job_openings_by_company):
@@ -21,36 +21,50 @@ def send_email_ses(job_openings_by_company):
 
     body_html = f"""
     <html>
-        <body style="background-color: #{color_scheme['background']}; font-family: Georgia, serif;">
-            <div style="background-color: #{color_scheme['container']}; margin: auto; width: 80%; padding: 20px; text-align: center;">
-                <h1 style="color: #{color_scheme['text']};">Job Openings</h1>
-                <hr style="border: 0; height: 3px; background-color: #{color_scheme['line']}; width: 50%; margin: 20px auto;">
+       <body style="background-color: #{color_scheme['background']};text-align: center;font-family: Optima;">
+            <div class="container" style="background-color: #{color_scheme['container']};margin: auto;width: 80%;padding: 20px;">
+	            <div class="header" style="text-align: left;margin-left: 20px;">
+		            <h1 style="font-family: TimesNewRoman, serif;color: #{color_scheme['text']};">Hey Kevin,</h1>
+    	                <p style="font-family: Optima;">Here’s your weekly job search update!</p>
+	            </div>
+                <div class="quote" style="font-family: Optima;color: #{color_scheme['quote']};padding-left: 25%;padding-right: 25%;">
+    	            <hr style="margin: 20px auto;width: 50%;">
+    	            <em>Here’s a little motivational message. We’ll keep it short and sweet and cheery!</em>
+                    <hr style="margin: 20px auto;width: 50%;">
+                </div>
+                <div class="content" style="font-family: Optima;">
     """
 
     for company_name, job_openings in job_openings_by_company.items():
         company_url = job_openings[0][1]
-        body_html += f'<h2><a href="{company_url}" style="color: #{color_scheme["links"]}; text-decoration: none;">{company_name}</a></h2>'
+        body_html += f'<a href="{company_url}" style="color: #{color_scheme["links"]};text-decoration: none;"><h2 style="font-family: TimesNewRoman, serif;">{company_name}</h2></a>'
         for job, _ in job_openings:
-            body_html += f'<p style="color: #{color_scheme["text"]};">{job}</p>'
-        body_html += f'<hr style="border: 0; height: 3px; background-color: #{color_scheme["line"]}; width: 50%; margin: 20px auto;">'
+            body_html += f'<p style="font-family: Optima;">{job}</p>'
+        body_html += f'<hr style="margin: 20px auto;width: 80%;">'
 
     body_html += f"""
-        <hr style="border: 0; height: 5px; background-color: #{color_scheme["line"]}; width: 80%; margin: 20px auto;">
-        <h2>Companies that can't be scraped</h2>
+                </div>
+                <div class="header" style="text-align: left;margin-left: 20px;">
+    	            <h1 style="font-family: TimesNewRoman, serif;color: #{color_scheme['text']};">Check these out!</h1>
+                    <p style="font-family: Optima;">These are jobs that can't be scraped by the program.</p>
+                </div>
     """
 
     for company_name, company_data in js_companies.items():
         company_url = company_data['url']
-        body_html += f'<a href="{company_url}" style="color: #{color_scheme["links"]}; text-decoration: none;">{company_name}</a><br>'
+        body_html += f'<a href="{company_url}" style="color: #{color_scheme["links"]};text-decoration: none;"><p style="font-family: Optima;">{company_name}</p></a>'
 
     body_html += f"""
-        <hr style="border: 0; height: 5px; background-color: #{color_scheme["line"]}; width: 80%; margin: 20px auto;">
-        <h2>Companies to check for open positions</h2>
+                <hr style="margin: 20px auto;width: 80%;">
+                <div class="header" style="text-align: left;margin-left: 20px;">
+    	            <h1 style="font-family: TimesNewRoman, serif;color: #{color_scheme['text']};">Also these!</h1>
+                    <p style="font-family: Optima;">These are jobs that didn't have listings to base the scraping off of.</p>
+                </div>
     """
 
     for company_name, company_data in no_listing_companies.items():
         company_url = company_data['url']
-        body_html += f'<a href="{company_url}" style="color: #{color_scheme["links"]}; text-decoration: none;">{company_name}</a><br>'
+        body_html += f'<a href="{company_url}" style="color: #{color_scheme["links"]};text-decoration: none;"><p style="font-family: Optima;">{company_name}</p></a>'
 
     body_html += """
             </div>
